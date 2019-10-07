@@ -4,12 +4,7 @@ import yaml
 class Reader:
 
     def __init__(self):
-        self._settings = None
         self._instructions = None
-
-    @property
-    def settings(self):
-        return self._settings
 
     @property
     def instructions(self):
@@ -43,6 +38,6 @@ class Reader:
 
         return table, knights, items
 
-    def read_settings(self, filename):
+    def get_game_settings(self, filename):
         with open(filename) as fh:
-            self._settings = self.fetch_setting_data(yaml.safe_load(fh))
+            return self.fetch_setting_data(yaml.safe_load(fh))

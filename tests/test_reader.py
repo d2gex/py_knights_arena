@@ -48,3 +48,13 @@ def test_fetch_setting_data_items(settings):
     assert all(condition for condition in (len(position) == 2,
                                            isinstance(position, tuple),
                                            all(isinstance(x, int) for x in position)))
+
+
+def test_get_game_settings():
+    '''a tuple with table, knights and dicts should be returned from any file settings
+    '''
+    reader = Reader()
+    table, knights, items = reader.get_game_settings(join(test_utils.TEST, 'stubs', 'game_settings'))
+    assert isinstance(table, tuple)
+    assert isinstance(knights, dict)
+    assert isinstance(items, dict)
