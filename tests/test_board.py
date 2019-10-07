@@ -23,15 +23,15 @@ def test_set_knights(board, table_settings):
     '''
     arena, knights, items = table_settings
     board.set_knights(knights)
-    red, green = board.knights['RED'], board.knights['GREEN']
+    red, green = board.knights['R'], board.knights['G']
 
     # Check red position
-    x, y = knights['RED']['position']
-    assert board[x][y][0] == red.name
+    x, y = knights['R']['position']
+    assert board[x][y][0] == red.nickname
 
     # Check green position
-    x, y = knights['GREEN']['position']
-    assert board[x][y][0] == green.name
+    x, y = knights['G']['position']
+    assert board[x][y][0] == green.nickname
 
 
 def test_set_items(board, table_settings):
@@ -39,12 +39,12 @@ def test_set_items(board, table_settings):
     '''
     *_, items = table_settings
     board.set_items(items)
-    axe, magic_staff = board.items['Axe'], board.items['MagicStaff']
+    axe, magic_staff = board.items['A'], board.items['M']
 
     # Check red position
-    x, y = items['Axe']['position']
-    assert board[x][y][0] == axe.name
+    x, y = items['A']['position']
+    assert board[x][y][0] == axe.nickname
 
     # Check green position
-    x, y = items['MagicStaff']['position']
-    assert board[x][y][0] == magic_staff.name
+    x, y = items['M']['position']
+    assert board[x][y][0] == magic_staff.nickname

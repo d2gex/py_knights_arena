@@ -1,3 +1,9 @@
+KNIGHT_LIVE = 0
+KNIGHT_DROWNED = 1
+KNIGHT_DEAD = 2
+ITEM_USED = False
+
+
 class CellContent:
 
     def __init__(self, name, nickname, status, attack_score, defence_score):
@@ -74,6 +80,9 @@ class Knight(CellContent):
         '''
         return (self.surprise + self.attack_score + self.item.attack_score) > \
                (knight.defence_score + knight.item.defence_score)
+
+    def __str__(self):
+        return self.nickname if self.status == KNIGHT_LIVE else self.nickname.lower()
 
 
 class ItemFactory:

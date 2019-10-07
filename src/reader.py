@@ -22,19 +22,19 @@ class Reader:
         # create knights dictionary
         knights = {}
         for kn_dict in settings['knights']:
-            name = kn_dict['name']
-            knights[name] = {}
-            del kn_dict['name']
-            knights[name] = {key: value if key != 'position' else tuple(int(coord) for coord in value.split(','))
-                             for key, value in kn_dict.items()}
+            nickname = kn_dict['nickname']
+            knights[nickname] = {}
+            del kn_dict['nickname']
+            knights[nickname] = {key: value if key != 'position' else tuple(int(coord) for coord in value.split(','))
+                                 for key, value in kn_dict.items()}
 
         items = {}
         for item_dict in settings['items']:
-            name = item_dict['name']
-            items[name] = {}
-            del item_dict['name']
-            items[name] = {key: value if key != 'position' else tuple(int(coord) for coord in value.split(','))
-                           for key, value in item_dict.items()}
+            nickname = item_dict['nickname']
+            items[nickname] = {}
+            del item_dict['nickname']
+            items[nickname] = {key: value if key != 'position' else tuple(int(coord) for coord in value.split(','))
+                               for key, value in item_dict.items()}
 
         return table, knights, items
 

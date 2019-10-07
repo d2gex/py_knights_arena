@@ -27,8 +27,8 @@ def test_fetch_setting_data_knights(settings):
     table, knights, *_ = reader.fetch_setting_data(settings)
 
     # --> RED and GREEN knights should be in
-    assert all(kns in knights for kns in ('RED', 'GREEN'))
-    position = knights['RED']['position']
+    assert all(kns in knights for kns in ('R', 'G'))
+    position = knights['R']['position']
     # --> position is a tuple of two integers
     assert all(condition for condition in (len(position) == 2,
                                            isinstance(position, tuple),
@@ -42,8 +42,8 @@ def test_fetch_setting_data_items(settings):
     *_, items = reader.fetch_setting_data(settings)
 
     # --> Axe and MagicStaff items should be in
-    assert all(item in items for item in ('Axe', 'MagicStaff'))
-    position = items['Axe']['position']
+    assert all(item in items for item in ('A', 'M'))
+    position = items['A']['position']
     # --> position is a tuple of two integers
     assert all(condition for condition in (len(position) == 2,
                                            isinstance(position, tuple),
