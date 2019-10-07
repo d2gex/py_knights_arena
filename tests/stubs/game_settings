@@ -21,13 +21,13 @@ knights:
 items:
   - name: Axe
     nickname: A
-    position: 9,10
+    position: 6,5
     attack: 2
-    defense: 0
+    defence: 0
   - name: MagicStaff
     nickname: M
-    position: 10,10
+    position: 7,3
     attack: 1
-    defense: 1
+    defence: 1
 
 ...
