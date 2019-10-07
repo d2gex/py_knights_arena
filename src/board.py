@@ -70,6 +70,19 @@ class Board:
             self.update_cell(x, y, item)
             self.items[item.nickname] = x, y
 
+    def move_to_empty_cell(self, origin, dest, knight, item):
+        '''Update the board when a knight moves into an empty cell. If the knight has got an item, the position of
+        the item needs to be updated too.
+        '''
+
+        o_x, o_y = origin
+        d_x, d_y = dest
+        self.expunge_cell(o_x, o_y, knight.nickname)
+        self.update_cell(d_x, d_y, knight.nickname)
+        self.k_positions[knight.nickname] = d_x, d_y
+        if item:
+            self.i_positions[item.nickname] = d_x, d_y
+
     def move(self, knight, direction):
         '''
         '''
@@ -86,11 +99,13 @@ class Board:
         else:
             to_y -= 1
 
-        # did the knight fatally step out of the arena? => drowned
+        # did knight drowned?
         if any((to_x < 0, to_y < 0, to_x >= self.rows, to_y >= self.columns)):
             self.move_and_drown((from_x, from_y), kn, item)
         else:
-            pass
+            # did knight move to an empty cell?
+            if not self.arena[to_x][to_y]:
+                self.move_to_empty_cell((from_x, from_y), (to_x, to_y), kn, item)
 
     def __len__(self):
         return len(self.arena)

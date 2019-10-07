@@ -141,3 +141,39 @@ def test_move_knight_with_item_drown(board, table_settings):
     assert board.knights['G'].status == KNIGHT_DROWNED
     assert board.k_positions['G'] is None
     assert board[x][y] == {axe}
+
+
+def test_move_knight_no_item_to_empty_cell(board, table_settings):
+    '''When a knight with no item moves into an empty cell the destination cell should be updated
+    '''
+    table, knights, items = table_settings
+    board.set_knights(knights)
+
+    x, y = board.k_positions['G']
+    assert board[x][y]
+    assert board[x+1][y] is None
+    board.move('G', 'S')
+
+    assert board[x][y] is None  # previous cell is now empty
+    assert board[x+1][y] == {'G'}  # new cells shows the knight moved
+    assert board.k_positions['G'] == (x+1, y)  # the position of the knight needs to be updated
+
+
+def test_move_knight_with_item_to_empty_cell(board, table_settings):
+    '''When a knight moves into an empty cell it takes its item with him/her
+    '''
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+
+    axe = ItemFactory.axe()
+    board.knights['G'].item = axe
+    x, y = board.k_positions['G']
+    assert board[x][y]
+    assert board[x+1][y] is None
+    board.move('G', 'S')
+
+    assert board[x][y] is None  # previous cell is now empty
+    assert board[x+1][y] == {'G'}  # new cells shows the knight moved
+    assert board.k_positions['G'] == (x+1, y)  # the position of the knight needs to be updated
+    assert board.i_positions[axe.nickname] == (x+1, y)  # the position of the item needs to be updated
