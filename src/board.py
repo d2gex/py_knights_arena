@@ -58,6 +58,18 @@ class Board:
         else:
             self.arena[x][y] = {content}
 
+    def move_and_drown(self, origin, knight, item):
+        '''update the board when a knight move ends up in drowning. If the knight has got an item it leaves it
+        on the tile previous to sinking
+        '''
+        x, y = origin
+        knight.status = KNIGHT_DROWNED
+        self.expunge_cell(x, y, knight.nickname)
+        self.k_positions[knight.nickname] = None
+        if item:
+            self.update_cell(x, y, item)
+            self.items[item.nickname] = x, y
+
     def move(self, knight, direction):
         '''
         '''
@@ -76,14 +88,9 @@ class Board:
 
         # did the knight fatally step out of the arena? => drowned
         if any((to_x < 0, to_y < 0, to_x >= self.rows, to_y >= self.columns)):
-            kn.status = KNIGHT_DROWNED
-            self.expunge_cell(from_x, from_y, kn.nickname)
-            self.k_positions[kn.nickname] = None
-            if item:
-                self.update_cell(from_x, from_y, item)
-                self.items[item.nickname] = from_x, from_y
+            self.move_and_drown((from_x, from_y), kn, item)
         else:
-           pass
+            pass
 
     def __len__(self):
         return len(self.arena)
