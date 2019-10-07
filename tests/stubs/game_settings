@@ -1,0 +1,33 @@
+---
+
+table:
+  rows: 8
+  columns: 8
+
+knights:
+  - name: RED
+    nickname: R
+    attack: 1
+    defence: 1
+    status: LIVE
+    position: 3,5
+  - name: GREEN
+    nickname: G
+    position: 0,1
+    attack: 1
+    defence: 1
+    status: LIVE
+
+items:
+  - name: Axe
+    nickname: A
+    position: 9,10
+    attack: 2
+    defense: 0
+  - name: MagicStaff
+    nickname: M
+    position: 10,10
+    attack: 1
+    defense: 1
+
+...

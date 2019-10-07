@@ -60,7 +60,7 @@ def test_correct_line(i_reader):
 
 
 def test_extract(i_reader):
-    i_reader.extract(join(test_utils.TEST, 'stubs', 'instructions.txt'))
+    i_reader.get_game_settings(join(test_utils.TEST, 'stubs', 'instructions.txt'))
     assert len(i_reader) == 3
     assert i_reader[0] == ['R', 'N']
     assert i_reader[1] == ['G', 'S']

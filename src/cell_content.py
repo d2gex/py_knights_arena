@@ -47,7 +47,7 @@ class Item(CellContent):
 
 class Knight(CellContent):
 
-    def __init__(self,*args, surprise=0.5):
+    def __init__(self, *args, surprise=0.5):
         super().__init__(*args)
         self.surprise = surprise
         self._item = None
