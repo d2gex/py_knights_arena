@@ -39,3 +39,8 @@ class Board:
 
     def __getitem__(self, item):
         return self.arena[item]
+
+    def __str__(self):
+        return "\n|" + \
+               "\n|".join("|".join(str(column).center(9, ' ') if column is not None else ' '.center(9, ' ')
+                                   for column in row) for row in self.arena)
