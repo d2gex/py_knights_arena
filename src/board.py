@@ -23,7 +23,7 @@ class Board:
                                          data['defence']) for nickname, data in knights.items()}
         for nickname, data in knights.items():
             x, y = data['position']
-            self.arena[x][y] = [nickname]
+            self.arena[x][y] = {nickname}
             self.k_positions[nickname] = data['position']
 
     def set_items(self, items):
@@ -37,7 +37,7 @@ class Board:
                                      data['defence']) for nickname, data in items.items()}
         for nickname, data in items.items():
             x, y = data['position']
-            self.arena[x][y] = [nickname]
+            self.arena[x][y] = {nickname}
             self.i_positions[nickname] = data['position']
 
     def __len__(self):

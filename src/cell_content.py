@@ -32,6 +32,9 @@ class CellContent:
     def __str__(self):
         return self.nickname
 
+    def __hash__(self):
+        return hash(self.nickname)
+
 
 class Item(CellContent):
 
