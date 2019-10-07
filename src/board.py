@@ -40,32 +40,50 @@ class Board:
             self.arena[x][y] = {nickname}
             self.i_positions[nickname] = data['position']
 
-    def remove_cell_item(self, x, y, item):
+    def expunge_cell(self, x, y, content):
+        '''Remove the given content from a cell and makes it None if it holds no longer elements
+        '''
         cell = self.arena[x][y]
-        cell.remove(item)
+        cell.remove(content)
         if not cell:
             self.arena[x][y] = None
 
-    def move(self, knight, direction):
-        x, y = self.k_positions[knight]
-        a_x, a_y = x, y
-        kn = self.knights[knight]
-        if direction == 'S':
-            x += 1
-        elif direction == 'N':
-            x -= 1
-        elif direction == 'E':
-            y += 1
+    def update_cell(self, x, y, content):
+        '''Update a cell by adding the given content to it. If cell was None a new set with the given element
+        is created
+        '''
+        cell = self.arena[x][y]
+        if cell:
+            cell.add(content)
         else:
-            y -= 1
+            self.arena[x][y] = {content}
+
+    def move(self, knight, direction):
+        '''
+        '''
+        to_x, to_y = self.k_positions[knight]
+        from_x, from_y = to_x, to_y
+        kn = self.knights[knight]
+        item = kn.item if kn.item else None
+        if direction == 'S':
+            to_x += 1
+        elif direction == 'N':
+            to_x -= 1
+        elif direction == 'E':
+            to_y += 1
+        else:
+            to_y -= 1
 
         # did the knight fatally step out of the arena? => drowned
-        if any((x < 0, y < 0, x >= self.rows, y >= self.columns)):
+        if any((to_x < 0, to_y < 0, to_x >= self.rows, to_y >= self.columns)):
             kn.status = KNIGHT_DROWNED
-            self.remove_cell_item(a_x, a_y, kn.nickname)
+            self.expunge_cell(from_x, from_y, kn.nickname)
             self.k_positions[kn.nickname] = None
+            if item:
+                self.update_cell(from_x, from_y, item)
+                self.items[item.nickname] = from_x, from_y
         else:
-            pass
+           pass
 
     def __len__(self):
         return len(self.arena)

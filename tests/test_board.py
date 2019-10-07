@@ -2,7 +2,7 @@ import pytest
 
 from os.path import join
 from src.reader import Reader
-from src.cell_content import KNIGHT_DROWNED
+from src.cell_content import ItemFactory, KNIGHT_DROWNED
 from src.board import Board
 from tests import utils as test_utils
 
@@ -55,31 +55,33 @@ def test_set_items(board, table_settings):
     assert board.i_positions[magic_staff.nickname] == (x, y)
 
 
-def test_move_knight_north_and_drown(board, table_settings):
+def test_move_knight_no_item_north_and_drown(board, table_settings):
+    '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
+    item
+    '''
     table, knights, items = table_settings
     board.set_knights(knights)
     x, y = 0, 0
     board[x][y] = {'G'}
     board.k_positions['G'] = x, y
 
-    # G in (0, 2) drowns if move North
-    x, y = board.k_positions['G']
     board.move('G', 'N')
 
-    assert board.knights['G'].status == KNIGHT_DROWNED
-    assert board.k_positions['G'] is None
-    assert board[x][y] is None
+    assert board.knights['G'].status == KNIGHT_DROWNED  # Knight is drowned
+    assert board.k_positions['G'] is None  # Position of drowned knight is null
+    assert board[x][y] is None  # previous position remains empty if not no items
 
 
-def test_move_knight_west_and_drown(board, table_settings):
+def test_move_knight__no_item_west_and_drown(board, table_settings):
+    '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
+    item
+    '''
     table, knights, items = table_settings
     board.set_knights(knights)
     x, y = 0, 0
     board[x][y] = {'G'}
     board.k_positions['G'] = x, y
 
-    # G in (0, 2) drowns if move North
-    x, y = board.k_positions['G']
     board.move('G', 'W')
 
     assert board.knights['G'].status == KNIGHT_DROWNED
@@ -87,15 +89,16 @@ def test_move_knight_west_and_drown(board, table_settings):
     assert board[x][y] is None
 
 
-def test_move_knight_south_and_drown(board, table_settings):
+def test_move_knight__no_item_south_and_drown(board, table_settings):
+    '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
+    item
+    '''
     table, knights, items = table_settings
     board.set_knights(knights)
     x, y = 7, 7
     board[x][y] = {'G'}
     board.k_positions['G'] = x, y
 
-    # G in (0, 2) drowns if move North
-    x, y = board.k_positions['G']
     board.move('G', 'S')
 
     assert board.knights['G'].status == KNIGHT_DROWNED
@@ -103,17 +106,38 @@ def test_move_knight_south_and_drown(board, table_settings):
     assert board[x][y] is None
 
 
-def test_move_knight_east_and_drown(board, table_settings):
+def test_move_knight__no_item_east_and_drown(board, table_settings):
+    '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
+    item
+    '''
     table, knights, items = table_settings
     board.set_knights(knights)
     x, y = 7, 7
     board[x][y] = {'G'}
     board.k_positions['G'] = x, y
 
-    # G in (0, 2) drowns if move North
-    x, y = board.k_positions['G']
     board.move('G', 'E')
 
     assert board.knights['G'].status == KNIGHT_DROWNED
     assert board.k_positions['G'] is None
     assert board[x][y] is None
+
+
+def test_move_knight_with_item_drown(board, table_settings):
+    '''Ensure that when knight with an item drown its status and position is update as well as its item is
+    left on the tile he/she was standing
+    '''
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+    x, y = 7, 7
+    board[x][y] = {'G'}
+    board.k_positions['G'] = x, y
+    axe = ItemFactory.axe()
+    board.knights['G'].item = axe
+
+    board.move('G', 'E')
+
+    assert board.knights['G'].status == KNIGHT_DROWNED
+    assert board.k_positions['G'] is None
+    assert board[x][y] == {axe}
