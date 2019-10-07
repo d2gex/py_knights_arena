@@ -9,9 +9,12 @@ class Board:
         self.arena = [[None for self.columns in range(columns)] for self.rows in range(rows)]
         self.knights = None
         self.items = None
+        self.k_positions = {}
+        self.i_positions = {}
 
     def set_knights(self, knights):
-        '''Create a dictionary of knights as Cell Content objects and place them on the arena
+        '''Create a dictionary of knights as Cell Content objects and place them on the arena, updating the dictionary of
+        positions for knights
         '''
         self.knights = {nickname: Knight(data['name'],
                                          nickname,
@@ -21,9 +24,11 @@ class Board:
         for nickname, data in knights.items():
             x, y = data['position']
             self.arena[x][y] = [nickname]
+            self.k_positions[nickname] = data['position']
 
     def set_items(self, items):
-        '''Create a dictionary of items as Cell Content objects and place them on the arena
+        '''Create a dictionary of items as Cell Content objects and place them on the arena, updating the dictionary of
+        positions for items
         '''
         self.items = {nickname: Item(data['name'],
                                      nickname,
@@ -33,6 +38,7 @@ class Board:
         for nickname, data in items.items():
             x, y = data['position']
             self.arena[x][y] = [nickname]
+            self.i_positions[nickname] = data['position']
 
     def __len__(self):
         return len(self.arena)

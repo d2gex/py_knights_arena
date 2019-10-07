@@ -82,6 +82,8 @@ class Knight(CellContent):
                (knight.defence_score + knight.item.defence_score)
 
     def __str__(self):
+        '''Return its nickname in uppercase if the knight is still alive or in lowercase otherwise
+        '''
         return self.nickname if self.status == KNIGHT_LIVE else self.nickname.lower()
 
 

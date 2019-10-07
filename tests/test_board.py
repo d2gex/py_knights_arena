@@ -28,10 +28,12 @@ def test_set_knights(board, table_settings):
     # Check red position
     x, y = knights['R']['position']
     assert board[x][y][0] == red.nickname
+    assert board.k_positions[red.nickname] == (x, y)
 
     # Check green position
     x, y = knights['G']['position']
     assert board[x][y][0] == green.nickname
+    assert board.k_positions[green.nickname] == (x, y)
 
 
 def test_set_items(board, table_settings):
@@ -44,7 +46,9 @@ def test_set_items(board, table_settings):
     # Check red position
     x, y = items['A']['position']
     assert board[x][y][0] == axe.nickname
+    assert board.i_positions[axe.nickname] == (x, y)
 
     # Check green position
     x, y = items['M']['position']
     assert board[x][y][0] == magic_staff.nickname
+    assert board.i_positions[magic_staff.nickname] == (x, y)
