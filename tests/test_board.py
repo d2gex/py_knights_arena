@@ -2,6 +2,7 @@ import pytest
 
 from os.path import join
 from src.reader import Reader
+from src.cell_content import KNIGHT_DROWNED
 from src.board import Board
 from tests import utils as test_utils
 
@@ -52,3 +53,67 @@ def test_set_items(board, table_settings):
     x, y = items['M']['position']
     assert magic_staff.nickname in board[x][y]
     assert board.i_positions[magic_staff.nickname] == (x, y)
+
+
+def test_move_knight_north_and_drown(board, table_settings):
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    x, y = 0, 0
+    board[x][y] = {'G'}
+    board.k_positions['G'] = x, y
+
+    # G in (0, 2) drowns if move North
+    x, y = board.k_positions['G']
+    board.move('G', 'N')
+
+    assert board.knights['G'].status == KNIGHT_DROWNED
+    assert board.k_positions['G'] is None
+    assert board[x][y] is None
+
+
+def test_move_knight_west_and_drown(board, table_settings):
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    x, y = 0, 0
+    board[x][y] = {'G'}
+    board.k_positions['G'] = x, y
+
+    # G in (0, 2) drowns if move North
+    x, y = board.k_positions['G']
+    board.move('G', 'W')
+
+    assert board.knights['G'].status == KNIGHT_DROWNED
+    assert board.k_positions['G'] is None
+    assert board[x][y] is None
+
+
+def test_move_knight_south_and_drown(board, table_settings):
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    x, y = 7, 7
+    board[x][y] = {'G'}
+    board.k_positions['G'] = x, y
+
+    # G in (0, 2) drowns if move North
+    x, y = board.k_positions['G']
+    board.move('G', 'S')
+
+    assert board.knights['G'].status == KNIGHT_DROWNED
+    assert board.k_positions['G'] is None
+    assert board[x][y] is None
+
+
+def test_move_knight_east_and_drown(board, table_settings):
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    x, y = 7, 7
+    board[x][y] = {'G'}
+    board.k_positions['G'] = x, y
+
+    # G in (0, 2) drowns if move North
+    x, y = board.k_positions['G']
+    board.move('G', 'E')
+
+    assert board.knights['G'].status == KNIGHT_DROWNED
+    assert board.k_positions['G'] is None
+    assert board[x][y] is None
