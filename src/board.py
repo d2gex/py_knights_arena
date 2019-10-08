@@ -87,6 +87,20 @@ class Board:
         if item_nk:
             self.i_positions[item_nk] = d_x, d_y
 
+    def move_to_single_item_cell(self, origin, dest, knight_nk, item_nk, new_item_nk):
+        '''Update the board when a knight moves into a cell with an item.
+
+        a) If the knight has not item then picks it, removes it from the cell and update the item position.
+        b) Otherwise ignores it.
+        '''
+        d_x, d_y = dest
+        self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
+        # If not item => pick it up
+        if not item_nk:
+            self.knights[knight_nk].pick_item(new_item_nk)
+            self.i_positions[new_item_nk] = d_x, d_y
+            self.expunge_cell(d_x, d_y, new_item_nk)
+
     def move(self, knight, direction):
         '''
         '''
@@ -115,6 +129,14 @@ class Board:
             # did knight move to an empty cell?
             if not cell:
                 self.move_to_empty_cell((from_x, from_y), (to_x, to_y), knight_nk, item_nk)
+            elif len(cell) == 1:
+                # is it a cell with one single item
+                if cell[0] in self.items:
+                    new_item_nk = cell[0]
+                    self.move_to_single_item_cell((from_x, from_y), (to_x, to_y), knight_nk, item_nk, new_item_nk)
+                # is it a knight => time to fight
+                else:
+                    pass
 
     def __len__(self):
         return len(self.arena)

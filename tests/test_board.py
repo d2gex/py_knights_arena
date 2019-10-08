@@ -59,16 +59,18 @@ def test_move_knight_no_item_north_and_drown(board, table_settings):
     '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
     item
     '''
+    x, y = 0, 0
     table, knights, items = table_settings
     board.set_knights(knights)
-    x, y = 0, 0
-    board[x][y] = {'G'}
-    board.k_positions['G'] = x, y
 
-    board.move('G', 'N')
+    knight_nk = board.knights['G'].nickname
+    board[x][y] = {knight_nk}
+    board.k_positions[knight_nk] = x, y
 
-    assert board.knights['G'].status == KNIGHT_DROWNED  # Knight is drowned
-    assert board.k_positions['G'] is None  # Position of drowned knight is null
+    board.move(knight_nk, 'N')
+
+    assert board.knights[knight_nk].status == KNIGHT_DROWNED  # Knight is drowned
+    assert board.k_positions[knight_nk] is None  # Position of drowned knight is null
     assert board[x][y] is None  # previous position remains empty if not no items
 
 
@@ -76,16 +78,18 @@ def test_move_knight__no_item_west_and_drown(board, table_settings):
     '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
     item
     '''
+    x, y = 0, 0
     table, knights, items = table_settings
     board.set_knights(knights)
-    x, y = 0, 0
-    board[x][y] = {'G'}
-    board.k_positions['G'] = x, y
 
-    board.move('G', 'W')
+    knight_nk = board.knights['G'].nickname
+    board[x][y] = {knight_nk}
+    board.k_positions[knight_nk] = x, y
 
-    assert board.knights['G'].status == KNIGHT_DROWNED
-    assert board.k_positions['G'] is None
+    board.move(knight_nk, 'W')
+
+    assert board.knights[knight_nk].status == KNIGHT_DROWNED
+    assert board.k_positions[knight_nk] is None
     assert board[x][y] is None
 
 
@@ -93,16 +97,18 @@ def test_move_knight__no_item_south_and_drown(board, table_settings):
     '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
     item
     '''
+    x, y = 7, 7
     table, knights, items = table_settings
     board.set_knights(knights)
-    x, y = 7, 7
-    board[x][y] = {'G'}
-    board.k_positions['G'] = x, y
 
-    board.move('G', 'S')
+    knight_nk = board.knights['G'].nickname
+    board[x][y] = {knight_nk}
+    board.k_positions[knight_nk] = x, y
 
-    assert board.knights['G'].status == KNIGHT_DROWNED
-    assert board.k_positions['G'] is None
+    board.move(knight_nk, 'S')
+
+    assert board.knights[knight_nk].status == KNIGHT_DROWNED
+    assert board.k_positions[knight_nk] is None
     assert board[x][y] is None
 
 
@@ -110,16 +116,18 @@ def test_move_knight__no_item_east_and_drown(board, table_settings):
     '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
     item
     '''
+    x, y = 7, 7
     table, knights, items = table_settings
     board.set_knights(knights)
-    x, y = 7, 7
-    board[x][y] = {'G'}
-    board.k_positions['G'] = x, y
 
-    board.move('G', 'E')
+    knight_nk = board.knights['G'].nickname
+    board[x][y] = {knight_nk}
+    board.k_positions[knight_nk] = x, y
 
-    assert board.knights['G'].status == KNIGHT_DROWNED
-    assert board.k_positions['G'] is None
+    board.move(knight_nk, 'E')
+
+    assert board.knights[knight_nk].status == KNIGHT_DROWNED
+    assert board.k_positions[knight_nk] is None
     assert board[x][y] is None
 
 
@@ -127,19 +135,21 @@ def test_move_knight_with_item_drown(board, table_settings):
     '''Ensure that when knight with an item drown its status and position is update as well as its item is
     left on the tile he/she was standing
     '''
+    x, y = 7, 7
     table, knights, items = table_settings
     board.set_knights(knights)
     board.set_items(items)
-    x, y = 7, 7
-    board[x][y] = {'G'}
-    board.k_positions['G'] = x, y
+
+    knight_nk = board.knights['G'].nickname
     axe = board.items['A']
-    board.knights['G'].item = axe
+    board.knights[knight_nk].item = axe
+    board[x][y] = {knight_nk}
+    board.k_positions[knight_nk] = x, y
 
-    board.move('G', 'E')
+    board.move(knight_nk, 'E')
 
-    assert board.knights['G'].status == KNIGHT_DROWNED
-    assert board.k_positions['G'] is None
+    assert board.knights[knight_nk].status == KNIGHT_DROWNED
+    assert board.k_positions[knight_nk] is None
     assert board[x][y] == {axe.nickname}
 
 
@@ -149,14 +159,15 @@ def test_move_knight_no_item_to_empty_cell(board, table_settings):
     table, knights, items = table_settings
     board.set_knights(knights)
 
-    x, y = board.k_positions['G']
+    knight_nk = board.knights['G'].nickname
+    x, y = board.k_positions[knight_nk]
     assert board[x][y]
     assert board[x+1][y] is None
-    board.move('G', 'S')
+    board.move(knight_nk, 'S')
 
     assert board[x][y] is None  # previous cell is now empty
-    assert board[x+1][y] == {'G'}  # new cells shows the knight moved
-    assert board.k_positions['G'] == (x+1, y)  # the position of the knight needs to be updated
+    assert board[x+1][y] == {knight_nk}  # new cells shows the knight moved
+    assert board.k_positions[knight_nk] == (x+1, y)  # the position of the knight needs to be updated
 
 
 def test_move_knight_with_item_to_empty_cell(board, table_settings):
@@ -166,14 +177,36 @@ def test_move_knight_with_item_to_empty_cell(board, table_settings):
     board.set_knights(knights)
     board.set_items(items)
 
+    knight_nk = board.knights['G'].nickname
     axe = board.items['A']
-    board.knights['G'].item = axe
-    x, y = board.k_positions['G']
+    board.knights[knight_nk].item = axe
+    x, y = board.k_positions[knight_nk]
     assert board[x][y]
     assert board[x+1][y] is None
-    board.move('G', 'S')
+    board.move(knight_nk, 'S')
 
     assert board[x][y] is None  # previous cell is now empty
-    assert board[x+1][y] == {'G'}  # new cells shows the knight moved
-    assert board.k_positions['G'] == (x+1, y)  # the position of the knight needs to be updated
+    assert board[x+1][y] == {knight_nk}  # new cells shows the knight moved
+    assert board.k_positions[knight_nk] == (x+1, y)  # the position of the knight needs to be updated
     assert board.i_positions[axe.nickname] == (x+1, y)  # the position of the item needs to be updated
+
+
+def test_move_knight_no_item_to_single_item_cell(board, table_settings):
+    '''When a knight with no item moves into a cell with a single item, this picks it up.
+    '''
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+
+    knight = board.knights['G']
+    assert not knight.item
+    x, y = board.k_positions[knight.nickname]
+    axe = board.items['A']
+    board[x+1][y] = {axe.nickname}
+    board.move(knight.nickname, 'S')
+
+    assert board[x][y] is None
+    assert board[x + 1][y] == {knight.nickname}
+    assert board.k_positions[knight.nickname] == (x + 1, y)
+    assert board.i_positions[axe.nickname] == (x + 1, y)
+    assert knight.item
