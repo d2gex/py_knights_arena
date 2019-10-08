@@ -153,7 +153,7 @@ def test_move_knight_no_item_to_single_item_cell(board, table_settings):
     board.move(knight.nickname, 'S')
 
     assert board[x][y] is None
-    assert board[x + 1][y] == {knight.nickname, axe.nickname}
+    assert board[x + 1][y] == {knight.nickname}
     assert board.k_positions[knight.nickname] == (x + 1, y)
     assert board.i_positions[axe.nickname] == (x + 1, y)
     assert knight.item
