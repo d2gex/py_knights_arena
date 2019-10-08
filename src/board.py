@@ -111,6 +111,7 @@ class Board:
             if not item_nk:
                 knight.pick_item(items)
                 self.expunge_cell(d_x, d_y, knight.item.nickname)
+                self.update_cell(d_x, d_y, knight.item.nickname)
             else:
                 old_item_nk = knight.item.nickname
                 # Update the position of the existing held item and pick the best of them all
