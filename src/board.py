@@ -245,5 +245,6 @@ class Board:
         return self.arena[item]
 
     def __str__(self):
+        max_cell_length = max(len(str(y)) for x in self.arena for y in x if y)
         return "\n|" + \
-               "\n|".join(f"{'|'.join(str(column).center(15, ' ') if column is not None else ' '.center(15, ' ') for column in row)}|" for row in self.arena)
+               "\n|".join(f"{'|'.join(str(column).center(max_cell_length, ' ') if column is not None else ' '.center(max_cell_length, ' ') for column in row)}|" for row in self.arena)
