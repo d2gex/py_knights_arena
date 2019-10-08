@@ -168,6 +168,7 @@ class Board:
             if defender_nk:
                 d_knight = self.knights[defender_nk]
                 loser = d_knight if a_knight.beat(d_knight) else a_knight
+                self.update_cell(d_x, d_y, loser.item.nickname)
                 loser.item = None
                 loser.attack_score = 0
                 loser.defence_score = 0
@@ -218,7 +219,7 @@ class Board:
 
         # Fetch content about knights
         data = {data.name.lower(): [
-            list(self.k_positions[data.nickname]),
+            list(self.k_positions[data.nickname]) if self.k_positions[data.nickname] else None,
             data.status,
             data.item.name if data.item else None,
             data.attack_score + (data.item.attack_score if data.item else 0),
@@ -240,4 +241,4 @@ class Board:
 
     def __str__(self):
         return "\n|" + \
-               "\n|".join(f"{'|'.join(str(column).center(10, ' ') if column is not None else ' '.center(10, ' ') for column in row)}|" for row in self.arena)
+               "\n|".join(f"{'|'.join(str(column).center(15, ' ') if column is not None else ' '.center(15, ' ') for column in row)}|" for row in self.arena)

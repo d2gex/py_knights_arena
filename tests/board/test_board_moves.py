@@ -295,7 +295,7 @@ def test_move_knight_with_item_into_knight_with_item_cell(board, table_settings)
     board.move(attacker.nickname, 'S')
 
     assert board[x][y] is None
-    assert board[x + 1][y] == {attacker.nickname, defender.nickname}  # truce proclaimed between knights
+    assert board[x + 1][y] == {attacker.nickname, defender.nickname, magic_staff.nickname}
     # defender who is the loser in this case is updated
     assert defender.status == KNIGHT_DEAD
     assert defender.attack_score == defender.defence_score == 0
