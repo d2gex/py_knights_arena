@@ -1,7 +1,7 @@
 import pytest
 
 from os.path import join
-from src.instruction_reader import InstructionReader
+from src.reader import InstructionReader
 from src.errors import InstructionError
 from tests import utils as test_utils
 

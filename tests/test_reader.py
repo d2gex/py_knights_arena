@@ -2,7 +2,7 @@ import pytest
 import yaml
 
 from os.path import join
-from src.reader import Reader
+from src.reader import SettingReader
 from tests import utils as test_utils
 
 
@@ -13,7 +13,7 @@ def settings():
 
 
 def test_fetch_setting_data_table(settings):
-    reader = Reader()
+    reader = SettingReader()
     table, *_ = reader.fetch_setting_data(settings)
 
     # a) table should be a tuple
@@ -23,7 +23,7 @@ def test_fetch_setting_data_table(settings):
 def test_fetch_setting_data_knights(settings):
     '''Ensure knights are dicts and the position is a tuple of two integers
     '''
-    reader = Reader()
+    reader = SettingReader()
     table, knights, *_ = reader.fetch_setting_data(settings)
 
     # --> RED and GREEN knights should be in
@@ -38,7 +38,7 @@ def test_fetch_setting_data_knights(settings):
 def test_fetch_setting_data_items(settings):
     '''Ensure items are dicts and the position is a tuple of two integers
     '''
-    reader = Reader()
+    reader = SettingReader()
     *_, items = reader.fetch_setting_data(settings)
 
     # --> Axe and MagicStaff items should be in
@@ -53,7 +53,7 @@ def test_fetch_setting_data_items(settings):
 def test_get_game_settings():
     '''a tuple with table, knights and dicts should be returned from any file settings
     '''
-    reader = Reader()
+    reader = SettingReader()
     table, knights, items = reader.get_game_settings(join(test_utils.TEST, 'stubs', 'game_settings'))
     assert isinstance(table, tuple)
     assert isinstance(knights, dict)

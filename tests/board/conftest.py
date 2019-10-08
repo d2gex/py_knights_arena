@@ -1,14 +1,14 @@
 import pytest
 
 from os.path import join
-from src.reader import Reader
+from src.reader import SettingReader
 from src.board import Board
 from tests import utils as test_utils
 
 
 @pytest.fixture
 def table_settings():
-    reader = Reader()
+    reader = SettingReader()
     return reader.get_game_settings(join(test_utils.TEST, 'stubs', 'game_settings'))
 
 
