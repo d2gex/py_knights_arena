@@ -3,6 +3,8 @@
 table:
   rows: 8
   columns: 8
+  start: GAME-START
+  end: GAME-END
 
 knights:
   - name: RED

@@ -17,7 +17,7 @@ def test_fetch_setting_data_table(settings):
     table, *_ = reader.fetch_setting_data(settings)
 
     # a) table should be a tuple
-    assert table == (8, 8)
+    assert table == (8, 8, 'GAME-START', 'GAME-END')
 
 
 def test_fetch_setting_data_knights(settings):

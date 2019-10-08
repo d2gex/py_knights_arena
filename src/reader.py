@@ -62,7 +62,8 @@ class SettingReader:
         '''
 
         # create table tuple
-        table = (settings['table']['rows'], settings['table']['columns'])
+        s_table = settings['table']
+        table = (s_table['rows'], s_table['columns'], s_table['start'], s_table['end'])
 
         # create knights dictionary
         knights = {}
