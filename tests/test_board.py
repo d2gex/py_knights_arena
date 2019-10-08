@@ -236,6 +236,38 @@ def test_move_knight_with_item_to_single_item_cell(board, table_settings):
     assert knight.item == magic_staff  # Knight has ignored the new item even if the new one is more powerful
 
 
+def test_move_knight_with_item_multiple_item_cell(board, table_settings):
+    '''When a knight with item move to another cell with multiple items it picks the best item
+    '''
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+
+    # Arm the knight and add two other items to the cell about to move
+    knight = board.knights['G']
+    x, y = board.k_positions[knight.nickname]
+    magic_staff = board.items['M']
+    axe = board.items['A']
+    helmet = board.items['H']
+    knight.item = magic_staff
+    board[x+1][y] = {helmet.nickname, axe.nickname}
+
+    # Update item positions
+    board.i_positions[magic_staff.nickname] = x, y
+    board.i_positions[axe.nickname] = x + 1, y
+    board.i_positions[helmet.nickname] = x + 1, y
+
+    board.move(knight.nickname, 'S')
+
+    assert board[x][y] is None
+    # magic_staff has been replaced with axe so the cell shows the non-wanted items
+    assert board[x + 1][y] == {knight.nickname, magic_staff.nickname, helmet.nickname}
+    assert board.k_positions[knight.nickname] == (x + 1, y)
+    # All items - the one held by the knight and those on the floor - have teh same position
+    assert all(board.i_positions[nickname] == (x + 1, y) for nickname in board.items)
+    assert knight.item == axe  # knight has swapped magic_staff with axe
+
+
 def test_move_knight_no_item_into_knight_cell(board, table_settings):
     '''When a knight get into a cell with another knight but the former has not item => white flag is raised
     '''

@@ -111,10 +111,13 @@ class Board:
                 self.expunge_cell(d_x, d_y, knight.item.nickname)
             else:
                 old_item_nk = knight.item.nickname
+                # Update the position of the existing held item and pick the best of them all
+                self.i_positions[old_item_nk] = d_x, d_y
                 knight.pick_item(items)
                 # Update the cell with the new item if the knight picked up a new one
-                self.expunge_cell(d_x, d_y, old_item_nk)
-                self.update_cell(d_x, d_y, knight.item.nickname)
+                if old_item_nk != knight.item.nickname:
+                    self.expunge_cell(d_x, d_y, knight.item.nickname)
+                    self.update_cell(d_x, d_y, old_item_nk)
 
         # Update origin and destination cells
         self.expunge_cell(o_x, o_y, knight_nk)

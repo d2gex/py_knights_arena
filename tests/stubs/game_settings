@@ -29,5 +29,10 @@ items:
     position: 7,3
     attack: 1
     defence: 1
+  - name: Helmet
+    nickname: H
+    position: 7,4
+    attack: 0
+    defence: 1
 
 ...
