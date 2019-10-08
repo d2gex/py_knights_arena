@@ -244,14 +244,16 @@ def test_move_knight_no_item_into_knight_cell(board, table_settings):
     board.set_knights(knights)
     board.set_items(items)
 
-    # prepare the board for the scenario
+    # Arm the defender
     attacker = board.knights['G']
     defender = board.knights['R']
     magic_staff = board.items['M']
     defender.item = magic_staff
+
+    # Update both positions of the defender
     x, y = board.k_positions[attacker.nickname]
     board[x + 1][y] = {defender.nickname}
-    board.i_positions[defender.item.nickname] = (x+1, y)
+    board.i_positions[defender.item.nickname] = x + 1, y
 
     board.move(attacker.nickname, 'S')
 
@@ -269,14 +271,16 @@ def test_move_knight_with_item_into_knight_no_item_cell(board, table_settings):
     board.set_knights(knights)
     board.set_items(items)
 
-    # prepare the board for the scenario
+    # Arm the attacker
     attacker = board.knights['G']
     defender = board.knights['R']
     magic_staff = board.items['M']
     attacker.item = magic_staff
+
+    # Update the position of the defender and that of the attacker's item
     x, y = board.k_positions[attacker.nickname]
     board[x + 1][y] = {defender.nickname}
-    board.i_positions[attacker.item.nickname] = (x+1, y)
+    board.i_positions[attacker.item.nickname] = x + 1, y
 
     board.move(attacker.nickname, 'S')
 
@@ -294,13 +298,15 @@ def test_move_knight_with_item_into_knight_with_item_cell(board, table_settings)
     board.set_knights(knights)
     board.set_items(items)
 
-    # prepare the board for the scenario
+    # Arm both knights
     attacker = board.knights['G']
     defender = board.knights['R']
     axe = board.items['A']
     magic_staff = board.items['M']
     attacker.item = axe
     defender.item = magic_staff
+
+    # Update both position of defender and that of the attacker's item
     x, y = board.k_positions[attacker.nickname]
     board[x + 1][y] = {defender.nickname}
     board.k_positions[defender.nickname] = x + 1, y
