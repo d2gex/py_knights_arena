@@ -24,7 +24,7 @@ items:
     position: 6,5
     attack: 2
     defence: 0
-  - name: MagicStaff
+  - name: Magic_Staff
     nickname: M
     position: 7,3
     attack: 1

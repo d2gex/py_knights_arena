@@ -210,6 +210,27 @@ class Board:
             else:
                 self.move_to_cell_with_knights(origin, dest, knight_nk)
 
+    def to_json(self):
+        '''Given a board in a moment in time it exports all data about knights and items such as status, position and
+        scores
+        '''
+
+        # Fetch content about knights
+        data = {data.name.lower(): [
+            list(self.k_positions[data.nickname]),
+            data.status,
+            data.item.name if data.item else None,
+            data.attack_score + (data.item.attack_score if data.item else 0),
+            data.defence_score + (data.item.defence_score if data.item else 0)
+        ] for name, data in self.knights.items()}
+
+        # Fetch content about items
+        used_items = {knight.item.nickname for nickname, knight in self.knights.items() if knight.item}
+        data.update({data.name.lower(): [list(self.i_positions[data.nickname]), data.nickname in used_items]
+                     for name, data in self.items.items()})
+
+        return json.dumps(data)
+
     def __len__(self):
         return len(self.arena)
 
