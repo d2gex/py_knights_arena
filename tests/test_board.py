@@ -203,6 +203,7 @@ def test_move_knight_no_item_to_single_item_cell(board, table_settings):
     x, y = board.k_positions[knight.nickname]
     axe = board.items['A']
     board[x+1][y] = {axe.nickname}
+
     board.move(knight.nickname, 'S')
 
     assert board[x][y] is None
@@ -210,3 +211,26 @@ def test_move_knight_no_item_to_single_item_cell(board, table_settings):
     assert board.k_positions[knight.nickname] == (x + 1, y)
     assert board.i_positions[axe.nickname] == (x + 1, y)
     assert knight.item
+
+
+def test_move_knight_with_item_to_single_item_cell(board, table_settings):
+    '''When a knight with item move to another cell with an item, it ignores it
+    '''
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+
+    knight = board.knights['G']
+    x, y = board.k_positions[knight.nickname]
+    magic_staff = board.items['M']
+    knight.item = magic_staff
+    board[x+1][y] = {magic_staff.nickname}
+    board.i_positions[magic_staff.nickname] = x, y
+
+    board.move(knight.nickname, 'S')
+
+    assert board[x][y] is None
+    assert board[x + 1][y] == {knight.nickname, magic_staff.nickname}   #now the cell has a knight and item
+    assert board.k_positions[knight.nickname] == (x + 1, y)
+    assert board.i_positions[magic_staff.nickname] == (x + 1, y)
+    assert knight.item == magic_staff  # Knight has ignored the new item even if the new one is more powerful

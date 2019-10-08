@@ -93,6 +93,7 @@ class Board:
         a) If the knight has not item then picks it, removes it from the cell and update the item position.
         b) Otherwise ignores it.
         '''
+
         d_x, d_y = dest
         self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
         # If not item => pick it up
@@ -146,4 +147,4 @@ class Board:
 
     def __str__(self):
         return "\n|" + \
-               "\n|".join(f"{'|'.join(str(column).center(9, ' ') if column is not None else ' '.center(9, ' ') for column in row)}|" for row in self.arena)
+               "\n|".join(f"{'|'.join(str(column).center(10, ' ') if column is not None else ' '.center(10, ' ') for column in row)}|" for row in self.arena)
