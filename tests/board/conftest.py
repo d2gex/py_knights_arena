@@ -15,4 +15,5 @@ def table_settings():
 @pytest.fixture(autouse=True)
 def board(table_settings):
     arena, *_ = table_settings
-    return Board(*arena)
+    rows, columns, *_ = arena
+    return Board(rows, columns)

@@ -179,36 +179,37 @@ class Board:
         to_x, to_y = self.k_positions[knight]
         from_x, from_y = to_x, to_y
         kn = self.knights[knight]
-        knight_nk = kn.nickname
-        item_nk = kn.item.nickname if kn.item else None
-        if direction == 'S':
-            to_x += 1
-        elif direction == 'N':
-            to_x -= 1
-        elif direction == 'E':
-            to_y += 1
-        else:
-            to_y -= 1
-
-        # did knight drowned?
-        if any((to_x < 0, to_y < 0, to_x >= self.rows, to_y >= self.columns)):
-            self.move_and_drown((from_x, from_y), knight_nk, item_nk)
-        else:
-            origin = (from_x, from_y)
-            dest = (to_x, to_y)
-            try:
-                cell = list(self.arena[to_x][to_y])
-            except TypeError:
-                cell = None
-            # did knight move to an empty cell?
-            if not cell:
-                self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
-            # did it to a cell with items only?
-            elif all(content in self.items for content in cell):
-                self.move_to_cell_with_items_only(origin, dest, knight_nk, item_nk)
-            # ... or are there both knights and items
+        if kn.status == KNIGHT_LIVE:
+            knight_nk = kn.nickname
+            item_nk = kn.item.nickname if kn.item else None
+            if direction == 'S':
+                to_x += 1
+            elif direction == 'N':
+                to_x -= 1
+            elif direction == 'E':
+                to_y += 1
             else:
-                self.move_to_cell_with_knights(origin, dest, knight_nk)
+                to_y -= 1
+
+            # did knight drowned?
+            if any((to_x < 0, to_y < 0, to_x >= self.rows, to_y >= self.columns)):
+                self.move_and_drown((from_x, from_y), knight_nk, item_nk)
+            else:
+                origin = (from_x, from_y)
+                dest = (to_x, to_y)
+                try:
+                    cell = list(self.arena[to_x][to_y])
+                except TypeError:
+                    cell = None
+                # did knight move to an empty cell?
+                if not cell:
+                    self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
+                # did it to a cell with items only?
+                elif all(content in self.items for content in cell):
+                    self.move_to_cell_with_items_only(origin, dest, knight_nk, item_nk)
+                # ... or are there both knights and items
+                else:
+                    self.move_to_cell_with_knights(origin, dest, knight_nk)
 
     def to_json(self):
         '''Given a board in a moment in time it exports all data about knights and items such as status, position and

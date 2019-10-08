@@ -339,3 +339,32 @@ def test_move_knight_to_a_mixed_cell(board, table_settings):
     # Both knights and items have their position updated
     assert all(board.i_positions[nickname] == (x + 1, y) for nickname in board.i_positions if nickname in board.items)
     assert all(board.k_positions[nickname] == (x + 1, y) for nickname in board.k_positions if nickname in board.knights)
+
+
+def test_move_knight_when_dead_or_drowned(board, table_settings):
+    '''A knight who is dead the move does not apply
+    '''
+
+    x, y = 0, 0
+    table, knights, items = table_settings
+    board.set_knights(knights)
+
+    knight = board.knights['G']
+    knight.status = KNIGHT_DEAD
+    board[x][y] = {knight.nickname}
+    board.k_positions[knight.nickname] = x, y
+
+    board.move(knight.nickname, 'N')
+
+    # If the move was applicable, the knight would drown and its position would be DROWNED
+    assert board.knights[knight.nickname].status == KNIGHT_DEAD
+    assert board.k_positions[knight.nickname] == (x, y)
+
+    knight.status = KNIGHT_DROWNED
+
+    board.move(knight.nickname, 'N')
+    # If the move was applicable,  the knight would drown and its position would be DROWNED
+    assert board.knights[knight.nickname].status == KNIGHT_DROWNED
+    assert board.k_positions[knight.nickname] == (x, y)
+
+
