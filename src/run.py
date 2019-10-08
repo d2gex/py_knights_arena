@@ -20,12 +20,12 @@ def run(s_filename, i_filename, data_folder):
     board.set_knights(knights)
     board.set_items(items)
     to_file(str(board), join(data_folder, 'board_map_before.txt'))
-    to_file(board.to_json(), join(data_folder, 'board_json_before.txt'))
+    to_file(board.to_json(), join(data_folder, 'initial_state.json'))
     for instruction in instructions:
         knight, direction = instruction
         board.move(knight, direction)
     to_file(str(board), join(data_folder, 'board_map_after.txt'))
-    to_file(board.to_json(), join(data_folder, 'board_json_after.txt'))
+    to_file(board.to_json(), join(data_folder, 'final_state.json'))
 
 
 if __name__ == "__main__":
