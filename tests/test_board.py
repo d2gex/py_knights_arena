@@ -2,7 +2,7 @@ import pytest
 
 from os.path import join
 from src.reader import Reader
-from src.cell_content import ItemFactory, KNIGHT_DROWNED, KNIGHT_DEAD
+from src.cell_content import KNIGHT_DROWNED, KNIGHT_DEAD, KNIGHT_LIVE
 from src.board import Board
 from tests import utils as test_utils
 
@@ -358,3 +358,38 @@ def test_move_knight_with_item_into_knight_with_item_cell(board, table_settings)
     assert board.i_positions[attacker.item.nickname] == (x + 1, y)
     assert board.k_positions[defender.nickname] == (x + 1, y)
     assert board.i_positions[d_item_nk] == (x + 1, y)
+
+
+def test_move_knight_to_a_mixed_cell(board, table_settings):
+    '''When a knight move into a cell where there are both items and knights, only knights are taken into
+    account ignoring fully the items. In this case scneario the defender does not have an item so nothing
+    occurs.
+    '''
+
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+
+    # Arm the knight and add two other items to the cell about to move
+    attacker = board.knights['G']
+    defender = board.knights['R']
+    x, y = board.k_positions[attacker.nickname]
+    magic_staff = board.items['M']
+    axe = board.items['A']
+    helmet = board.items['H']
+    attacker.item = magic_staff
+
+    # Update the board the position of both items in the cell and the defender awaiting for the attacker
+    board[x + 1][y] = {helmet.nickname, axe.nickname, defender.nickname}
+    board.i_positions[helmet.nickname] = x + 1, y
+    board.i_positions[axe.nickname] = x + 1, y
+    board.k_positions[defender.nickname] = x + 1, y
+
+    board.move(attacker.nickname, 'S')
+
+    assert board[x][y] is None
+    # knights raised white flag as defender
+    assert board[x + 1][y] == {attacker.nickname, defender.nickname, helmet.nickname, axe.nickname}
+    # Both knights and items have their position updated
+    assert all(board.i_positions[nickname] == (x + 1, y) for nickname in board.i_positions if nickname in board.items)
+    assert all(board.k_positions[nickname] == (x + 1, y) for nickname in board.k_positions if nickname in board.knights)
