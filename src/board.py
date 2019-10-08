@@ -58,30 +58,34 @@ class Board:
         else:
             self.arena[x][y] = {content}
 
-    def move_and_drown(self, origin, knight, item):
-        '''update the board when a knight move ends up in drowning. If the knight has got an item it leaves it
-        on the tile previous to sinking
+    def move_and_drown(self, origin, knight_nk, item_nk):
+        '''update the board when a knight move ends up in drowning.
+
+        a) if a knight with no item drowns its position is updated to None and its status to DROWNED
+        b) if in addition it has an item => leaves the item into the tile that was standing before drowning
         '''
         x, y = origin
-        knight.status = KNIGHT_DROWNED
-        self.expunge_cell(x, y, knight.nickname)
-        self.k_positions[knight.nickname] = None
-        if item:
-            self.update_cell(x, y, item)
-            self.items[item.nickname] = x, y
+        self.knights[knight_nk].status = KNIGHT_DROWNED
+        self.expunge_cell(x, y, knight_nk)
+        self.k_positions[knight_nk] = None
+        if item_nk:
+            self.update_cell(x, y, item_nk)
+            self.items[item_nk] = x, y
 
-    def move_to_empty_cell(self, origin, dest, knight, item):
-        '''Update the board when a knight moves into an empty cell. If the knight has got an item, the position of
-        the item needs to be updated too.
+    def move_to_empty_cell(self, origin, dest, knight_nk, item_nk):
+        '''Update the board when a knight moves into an empty cell.
+
+        a) if knight has not item the position of if is updated.
+        b) if in addition it has an item the position of the item is too updated
         '''
 
         o_x, o_y = origin
         d_x, d_y = dest
-        self.expunge_cell(o_x, o_y, knight.nickname)
-        self.update_cell(d_x, d_y, knight.nickname)
-        self.k_positions[knight.nickname] = d_x, d_y
-        if item:
-            self.i_positions[item.nickname] = d_x, d_y
+        self.expunge_cell(o_x, o_y, knight_nk)
+        self.update_cell(d_x, d_y, knight_nk)
+        self.k_positions[knight_nk] = d_x, d_y
+        if item_nk:
+            self.i_positions[item_nk] = d_x, d_y
 
     def move(self, knight, direction):
         '''
@@ -89,7 +93,8 @@ class Board:
         to_x, to_y = self.k_positions[knight]
         from_x, from_y = to_x, to_y
         kn = self.knights[knight]
-        item = kn.item if kn.item else None
+        knight_nk = kn.nickname
+        item_nk = kn.item.nickname if kn.item else None
         if direction == 'S':
             to_x += 1
         elif direction == 'N':
@@ -101,11 +106,15 @@ class Board:
 
         # did knight drowned?
         if any((to_x < 0, to_y < 0, to_x >= self.rows, to_y >= self.columns)):
-            self.move_and_drown((from_x, from_y), kn, item)
+            self.move_and_drown((from_x, from_y), knight_nk, item_nk)
         else:
+            try:
+                cell = list(self.arena[to_x][to_y])
+            except TypeError:
+                cell = None
             # did knight move to an empty cell?
-            if not self.arena[to_x][to_y]:
-                self.move_to_empty_cell((from_x, from_y), (to_x, to_y), kn, item)
+            if not cell:
+                self.move_to_empty_cell((from_x, from_y), (to_x, to_y), knight_nk, item_nk)
 
     def __len__(self):
         return len(self.arena)

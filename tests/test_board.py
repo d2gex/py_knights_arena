@@ -133,14 +133,14 @@ def test_move_knight_with_item_drown(board, table_settings):
     x, y = 7, 7
     board[x][y] = {'G'}
     board.k_positions['G'] = x, y
-    axe = ItemFactory.axe()
+    axe = board.items['A']
     board.knights['G'].item = axe
 
     board.move('G', 'E')
 
     assert board.knights['G'].status == KNIGHT_DROWNED
     assert board.k_positions['G'] is None
-    assert board[x][y] == {axe}
+    assert board[x][y] == {axe.nickname}
 
 
 def test_move_knight_no_item_to_empty_cell(board, table_settings):
@@ -166,7 +166,7 @@ def test_move_knight_with_item_to_empty_cell(board, table_settings):
     board.set_knights(knights)
     board.set_items(items)
 
-    axe = ItemFactory.axe()
+    axe = board.items['A']
     board.knights['G'].item = axe
     x, y = board.k_positions['G']
     assert board[x][y]
