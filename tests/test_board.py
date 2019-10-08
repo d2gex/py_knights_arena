@@ -2,7 +2,7 @@ import pytest
 
 from os.path import join
 from src.reader import Reader
-from src.cell_content import ItemFactory, KNIGHT_DROWNED
+from src.cell_content import ItemFactory, KNIGHT_DROWNED, KNIGHT_DEAD
 from src.board import Board
 from tests import utils as test_utils
 
@@ -234,3 +234,89 @@ def test_move_knight_with_item_to_single_item_cell(board, table_settings):
     assert board.k_positions[knight.nickname] == (x + 1, y)
     assert board.i_positions[magic_staff.nickname] == (x + 1, y)
     assert knight.item == magic_staff  # Knight has ignored the new item even if the new one is more powerful
+
+
+def test_move_knight_no_item_into_knight_cell(board, table_settings):
+    '''When a knight get into a cell with another knight but the former has not item => white flag is raised
+    '''
+
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+
+    # prepare the board for the scenario
+    attacker = board.knights['G']
+    defender = board.knights['R']
+    magic_staff = board.items['M']
+    defender.item = magic_staff
+    x, y = board.k_positions[attacker.nickname]
+    board[x + 1][y] = {defender.nickname}
+    board.i_positions[defender.item.nickname] = (x+1, y)
+
+    board.move(attacker.nickname, 'S')
+
+    assert board[x][y] is None
+    assert board[x + 1][y] == {attacker.nickname, defender.nickname}  # truce proclaimed between knights
+    assert board.k_positions[attacker.nickname] == (x + 1, y)
+    assert board.i_positions[magic_staff.nickname] == (x + 1, y)
+
+
+def test_move_knight_with_item_into_knight_no_item_cell(board, table_settings):
+    '''When a knight get into a cell with another knight but the latter has not item => white flag is raised
+    '''
+
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+
+    # prepare the board for the scenario
+    attacker = board.knights['G']
+    defender = board.knights['R']
+    magic_staff = board.items['M']
+    attacker.item = magic_staff
+    x, y = board.k_positions[attacker.nickname]
+    board[x + 1][y] = {defender.nickname}
+    board.i_positions[attacker.item.nickname] = (x+1, y)
+
+    board.move(attacker.nickname, 'S')
+
+    assert board[x][y] is None
+    assert board[x + 1][y] == {attacker.nickname, defender.nickname}  # truce proclaimed between knights
+    assert board.k_positions[attacker.nickname] == (x + 1, y)
+    assert board.i_positions[magic_staff.nickname] == (x + 1, y)
+
+
+def test_move_knight_with_item_into_knight_with_item_cell(board, table_settings):
+    '''When a knight with item get into a cell with another knight with item => they fight
+    '''
+
+    table, knights, items = table_settings
+    board.set_knights(knights)
+    board.set_items(items)
+
+    # prepare the board for the scenario
+    attacker = board.knights['G']
+    defender = board.knights['R']
+    axe = board.items['A']
+    magic_staff = board.items['M']
+    attacker.item = axe
+    defender.item = magic_staff
+    x, y = board.k_positions[attacker.nickname]
+    board[x + 1][y] = {defender.nickname}
+    board.k_positions[defender.nickname] = x + 1, y
+    board.i_positions[attacker.item.nickname] = x + 1, y
+    board.i_positions[defender.item.nickname] = x + 1, y
+    d_item_nk = defender.item.nickname
+
+    board.move(attacker.nickname, 'S')
+
+    assert board[x][y] is None
+    assert board[x + 1][y] == {attacker.nickname, defender.nickname}  # truce proclaimed between knights
+    # defender who is the loser in this case is updated
+    assert defender.status == KNIGHT_DEAD
+    assert defender.attack_score == defender.defence_score == 0
+    assert not defender.item
+    assert board.k_positions[attacker.nickname] == (x + 1, y)
+    assert board.i_positions[attacker.item.nickname] == (x + 1, y)
+    assert board.k_positions[defender.nickname] == (x + 1, y)
+    assert board.i_positions[d_item_nk] == (x + 1, y)

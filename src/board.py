@@ -102,6 +102,54 @@ class Board:
             self.i_positions[new_item_nk] = d_x, d_y
             self.expunge_cell(d_x, d_y, new_item_nk)
 
+    def move_to_cell_with_knights(self, origin, dest, knight_nk):
+        '''Update the board when a knight moves into a cell with another knight. The use cases are as follow
+
+        a) if the attacker has no item => white flag and avoid fight
+        b) if there is no defender with item -> white flag and avoid fight
+        c) if attacker has an item and there is a defender with item => fight so that:
+            c.1) the loser leaves the item on the tile and update its defence and attack scores to 0
+
+        The attacker always update its position
+        '''
+        o_x, o_y = origin
+        d_x, d_y = dest
+
+        # move attacker to new cell
+        self.expunge_cell(o_x, o_y, knight_nk)
+        self.update_cell(d_x, d_y, knight_nk)
+        self.k_positions[knight_nk] = d_x, d_y
+        a_knight = self.knights[knight_nk]
+
+        # does the attacker have an item?
+        if a_knight.item:
+
+            # update the position of the attacker's item
+            self.i_positions[a_knight.item.nickname] = d_x, d_y
+
+            # Find a defender with an item
+            defender_nk = None
+            for nickname in self.arena[d_x][d_y] - {a_knight.nickname}:
+                try:
+                    knight = self.knights[nickname]
+                except KeyError:
+                    pass
+                else:
+                    if knight.item:
+                        defender_nk = knight.nickname
+                        break
+
+            print("entro aqui")
+            # if defender found => fight
+            if defender_nk:
+                print("pero no aqui")
+                d_knight = self.knights[defender_nk]
+                loser = d_knight if a_knight.beat(d_knight) else a_knight
+                loser.item = None
+                loser.attack_score = 0
+                loser.defence_score = 0
+                loser.status = KNIGHT_DEAD
+
     def move(self, knight, direction):
         '''
         '''
@@ -123,21 +171,23 @@ class Board:
         if any((to_x < 0, to_y < 0, to_x >= self.rows, to_y >= self.columns)):
             self.move_and_drown((from_x, from_y), knight_nk, item_nk)
         else:
+            origin = (from_x, from_y)
+            dest = (to_x, to_y)
             try:
                 cell = list(self.arena[to_x][to_y])
             except TypeError:
                 cell = None
             # did knight move to an empty cell?
             if not cell:
-                self.move_to_empty_cell((from_x, from_y), (to_x, to_y), knight_nk, item_nk)
+                self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
             elif len(cell) == 1:
                 # is it a cell with one single item
                 if cell[0] in self.items:
                     new_item_nk = cell[0]
-                    self.move_to_single_item_cell((from_x, from_y), (to_x, to_y), knight_nk, item_nk, new_item_nk)
+                    self.move_to_single_item_cell(origin, dest, knight_nk, item_nk, new_item_nk)
                 # is it a knight => time to fight
                 else:
-                    pass
+                    self.move_to_cell_with_knights(origin, dest, knight_nk)
 
     def __len__(self):
         return len(self.arena)

@@ -17,9 +17,17 @@ class CellContent:
     def attack_score(self):
         return self._attack_score
 
+    @attack_score.setter
+    def attack_score(self, new_score):
+        self._attack_score = new_score
+
     @property
     def defence_score(self):
         return self._defence_score
+
+    @defence_score.setter
+    def defence_score(self, new_score):
+        self._defence_score = new_score
 
     @property
     def status(self):
