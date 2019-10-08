@@ -1,0 +1,63 @@
+---
+
+table:
+  rows: 8
+  columns: 8
+  start: GAME-START
+  end: GAME-END
+
+knights:
+  - name: RED
+    nickname: R
+    attack: 1
+    defence: 1
+    status: LIVE
+    position: 0,0
+  - name: BLUE
+    nickname: B
+    attack: 1
+    defence: 1
+    status: LIVE
+    position: 7,0
+  - name: GREEN
+    nickname: G
+    position: 7,7
+    attack: 1
+    defence: 1
+    status: LIVE
+  - name: GREEN
+    nickname: G
+    position: 7,7
+    attack: 1
+    defence: 1
+    status: LIVE
+  - name: YELLOW
+    nickname: Y
+    position: 0,7
+    attack: 1
+    defence: 1
+    status: LIVE
+
+items:
+  - name: Axe
+    nickname: A
+    position: 2,2
+    attack: 2
+    defence: 0
+  - name: Dagger
+    nickname: D
+    position: 2,5
+    attack: 1
+    defence: 0
+  - name: Magic_Staff
+    nickname: M
+    position: 5,2
+    attack: 1
+    defence: 1
+  - name: Helmet
+    nickname: H
+    position: 5,5
+    attack: 0
+    defence: 1
+
+...
