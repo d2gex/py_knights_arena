@@ -39,9 +39,9 @@ where:
 2.  ``<<moves.txt>``: is the path the move instructions
 3.  ``<<results_folder>>``: folder where the outputs as a result of running the script will be dropped.
 
-*PS:* It is very important that the input files ordered is respected.
+**PS:** It is very important that the input files ordered is respected.
 
-There is a ``game_settings``settings yaml file in **./examples** that contains the exact requirements of the challenge
+There is a ``game_settings`` settings yaml file in **./examples** that contains the exact requirements of the challenge
 so no need to create one manually is required. The file looks like as below:
 
 .. code-block:: yaml
@@ -119,16 +119,16 @@ as a result of running the script:
 1.  ``board_map_before.txt``: the script dumps the matrix to a txt file for visual recognition of where each cell
     content has.
 2.  ``initial_state.json``: following the json format requirements, it too generate a json file with the satus of the
-    board before the script is actually run
+    board before the script is actually run.
 3.  ``board_map_after.txt``: same as ``board_map_before.txt`` but after running the script.
 4.  ``final_state.json``: same as ``initial_state.json`` with the board as a result of playing the game.
 
 Some notes about the visual mapping:
 
 a)  Although the length of the column are calculated on the fly to maximise the visual space the pretty-print feature
-    is very basic. Just enough to help **functional testing**.
+    is very basic. Just enough to help further with **functional testing**.
 b)  ``drowned`` knights are not shown on the visual matrix as they are off the arena. However they do in the JSON file
-    as required
+    as required.
 c)  ``dead`` knights are still shown in uppercase in their corresponding cells. The json file reflects the status as
     required.
 d)  When a knight picks an item, the item is not shown on that cell on the visual matrix. It does as required in the
