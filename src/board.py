@@ -88,8 +88,9 @@ class Board:
         if item_nk:
             self.i_positions[item_nk] = d_x, d_y
 
-    def move_to_cell_with_items_only(self, origin, dest, knight_nk, item_nk):
-        '''Update the board when a knight moves into a cell with items only as follows:
+    def move_to_cell_with_items(self, origin, dest, knight_nk, item_nk):
+        '''Update the board when a knight moves into a cell with items and if any knight, it should
+         be dead as follows:
 
         a) If knight has no item pick one
         b) if knight has item and there are two or more items pick the best item of them all
@@ -101,7 +102,7 @@ class Board:
 
         o_x, o_y = origin
         d_x, d_y = dest
-        items = [self.items[x] for x in self.arena[d_x][d_y]]
+        items = [self.items[x] for x in self.arena[d_x][d_y] if x in self.items]
         knight = self.knights[knight_nk]
 
         # Do we need to update the knight item?
@@ -206,11 +207,15 @@ class Board:
                 if not cell:
                     self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
                 # did it to a cell with items only?
-                elif all(content in self.items for content in cell):
-                    self.move_to_cell_with_items_only(origin, dest, knight_nk, item_nk)
-                # ... or are there both knights and items
                 else:
-                    self.move_to_cell_with_knights(origin, dest, knight_nk)
+                    any_item = any(content in self.items for content in cell)
+                    all_knights_death = all(self.knights[content].status != KNIGHT_LIVE
+                                            for content in cell
+                                            if content in self.knights)
+                    if any_item and all_knights_death:
+                        self.move_to_cell_with_items(origin, dest, knight_nk, item_nk)
+                    else:
+                        self.move_to_cell_with_knights(origin, dest, knight_nk)
 
     def to_json(self):
         '''Given a board in a moment in time it exports all data about knights and items such as status, position and
