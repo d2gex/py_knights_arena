@@ -87,20 +87,41 @@ class Board:
         if item_nk:
             self.i_positions[item_nk] = d_x, d_y
 
-    def move_to_single_item_cell(self, origin, dest, knight_nk, item_nk, new_item_nk):
-        '''Update the board when a knight moves into a cell with an item.
+    def move_to_cell_with_items_only(self, origin, dest, knight_nk, item_nk):
+        '''Update the board when a knight moves into a cell with items only as follows:
 
-        a) If the knight has not item then picks it, removes it from the cell and update the item position.
-        b) Otherwise ignores it.
+        a) If knight has no item pick one
+        b) if knight has item and there are two or more items pick the best item of them all
+        c) Otherwise the knight keeps the item it had before entering in this cell
+
+        For a) to c) both the item and the knight position is updated. For case b) the cell is updated with the knight's
+        item if this picks one of the items in the cell.
         '''
 
+        o_x, o_y = origin
         d_x, d_y = dest
-        self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
-        # If not item => pick it up
-        if not item_nk:
-            self.knights[knight_nk].pick_item(new_item_nk)
-            self.i_positions[new_item_nk] = d_x, d_y
-            self.expunge_cell(d_x, d_y, new_item_nk)
+        items = [self.items[x] for x in self.arena[d_x][d_y]]
+        knight = self.knights[knight_nk]
+
+        # Do we need to update the knight item?
+        if not item_nk or len(items) > 1:
+
+            if not item_nk:
+                knight.pick_item(items)
+                self.expunge_cell(d_x, d_y, knight.item.nickname)
+            else:
+                old_item_nk = knight.item.nickname
+                knight.pick_item(items)
+                # Update the cell with the new item if the knight picked up a new one
+                self.expunge_cell(d_x, d_y, old_item_nk)
+                self.update_cell(d_x, d_y, knight.item.nickname)
+
+        # Update origin and destination cells
+        self.expunge_cell(o_x, o_y, knight_nk)
+        self.update_cell(d_x, d_y, knight_nk)
+        # Update knight and item position
+        self.k_positions[knight_nk] = d_x, d_y
+        self.i_positions[knight.item.nickname] = d_x, d_y
 
     def move_to_cell_with_knights(self, origin, dest, knight_nk):
         '''Update the board when a knight moves into a cell with another knight. The use cases are as follow
@@ -139,10 +160,8 @@ class Board:
                         defender_nk = knight.nickname
                         break
 
-            print("entro aqui")
             # if defender found => fight
             if defender_nk:
-                print("pero no aqui")
                 d_knight = self.knights[defender_nk]
                 loser = d_knight if a_knight.beat(d_knight) else a_knight
                 loser.item = None
@@ -180,14 +199,12 @@ class Board:
             # did knight move to an empty cell?
             if not cell:
                 self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
-            elif len(cell) == 1:
-                # is it a cell with one single item
-                if cell[0] in self.items:
-                    new_item_nk = cell[0]
-                    self.move_to_single_item_cell(origin, dest, knight_nk, item_nk, new_item_nk)
-                # is it a knight => time to fight
-                else:
-                    self.move_to_cell_with_knights(origin, dest, knight_nk)
+            # did it to a cell with items only?
+            elif all(content in self.items for content in cell):
+                self.move_to_cell_with_items_only(origin, dest, knight_nk, item_nk)
+            # ... or are there both knights and items
+            else:
+                self.move_to_cell_with_knights(origin, dest, knight_nk)
 
     def __len__(self):
         return len(self.arena)
