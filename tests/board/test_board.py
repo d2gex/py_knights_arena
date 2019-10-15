@@ -1,5 +1,6 @@
 import json
-from src.cell_content import KNIGHT_LIVE, KNIGHT_DEAD, KNIGHT_DROWNED
+
+from src.game.cell_content import KNIGHT_LIVE, KNIGHT_DEAD, KNIGHT_DROWNED
 
 
 def test_set_knights(board, table_settings):

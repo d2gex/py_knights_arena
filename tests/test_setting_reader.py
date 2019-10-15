@@ -1,8 +1,9 @@
+from os.path import join
+
 import pytest
 import yaml
 
-from os.path import join
-from src.reader import SettingReader
+from src.game.reader import SettingReader
 from tests import utils as test_utils
 
 

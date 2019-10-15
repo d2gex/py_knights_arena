@@ -1,5 +1,6 @@
 import pytest
-from src.cell_content import Item, Knight, ItemFactory, KnightFactory
+
+from src.game.cell_content import Item, ItemFactory, KnightFactory
 
 
 @pytest.fixture(scope='module')

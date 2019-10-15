@@ -1,8 +1,9 @@
+from os.path import join
+
 import pytest
 
-from os.path import join
-from src.reader import InstructionReader
-from src.errors import InstructionError
+from src.game.errors import InstructionError
+from src.game.reader import InstructionReader
 from tests import utils as test_utils
 
 HEADING = 'GAME-START'

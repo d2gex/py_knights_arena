@@ -1,8 +1,9 @@
+from os.path import join
+
 import pytest
 
-from os.path import join
-from src.reader import SettingReader
-from src.board import Board
+from src.game.board import Board
+from src.game.reader import SettingReader
 from tests import utils as test_utils
 
 

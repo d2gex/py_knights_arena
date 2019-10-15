@@ -1,5 +1,6 @@
 import yaml
-from src.errors import InstructionError
+
+from src.game.errors import InstructionError
 
 
 class InstructionReader:

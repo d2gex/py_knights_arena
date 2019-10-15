@@ -1,4 +1,4 @@
-from src.cell_content import KNIGHT_DROWNED, KNIGHT_DEAD
+from src.game.cell_content import KNIGHT_DROWNED, KNIGHT_DEAD
 
 
 def test_move_knight_no_item_north_and_drown(board, table_settings):
