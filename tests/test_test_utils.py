@@ -48,3 +48,47 @@ def test_reset_database():
 
             foo_bar()
             assert qy_model.call_count == 2 * len(tables)
+
+
+def test_fetch_setting_data_table(settings):
+    table, *_ = settings
+
+    # a) table should be a tuple
+    assert table == (8, 8, 'GAME-START', 'GAME-END')
+
+
+def test_fetch_setting_data_knights(settings):
+    '''Ensure knights are dicts and the position is a tuple of two integers
+    '''
+    table, knights, *_ = settings
+
+    # --> RED and GREEN knights should be in
+    assert all(kns in knights for kns in ('R', 'G'))
+    position = knights['R']['position']
+    # --> position is a tuple of two integers
+    assert all(condition for condition in (len(position) == 2,
+                                           isinstance(position, tuple),
+                                           all(isinstance(x, int) for x in position)))
+
+
+def test_fetch_setting_data_items(settings):
+    '''Ensure items are dicts and the position is a tuple of two integers
+    '''
+    *_, items = settings
+
+    # --> Axe and MagicStaff items should be in
+    assert all(item in items for item in ('A', 'M'))
+    position = items['A']['position']
+    # --> position is a tuple of two integers
+    assert all(condition for condition in (len(position) == 2,
+                                           isinstance(position, tuple),
+                                           all(isinstance(x, int) for x in position)))
+
+
+def test_get_game_settings(settings):
+    '''a tuple with table, knights and dicts should be returned from any file settings
+    '''
+    table, knights, items = settings
+    assert isinstance(table, tuple)
+    assert isinstance(knights, dict)
+    assert isinstance(items, dict)
