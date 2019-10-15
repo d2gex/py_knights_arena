@@ -2,7 +2,6 @@ import functools
 
 from os.path import join
 from pathlib import Path
-from sqlalchemy import Table
 from src import models
 from src.app import db
 
