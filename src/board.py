@@ -176,7 +176,13 @@ class Board:
                 loser.status = KNIGHT_DEAD
 
     def move(self, knight, direction):
-        '''
+        '''move a knight on the direction given and call the actions required for each use case as follows;
+
+        a) Move off the board and drown
+        b) Move to an empty cell
+        c) Move to a cell with items. A cell has an item only iff there is an item and no knights or if there are,
+        they are dead
+        d) Move to a cell with knights.
         '''
         to_x, to_y = self.k_positions[knight]
         from_x, from_y = to_x, to_y
@@ -193,27 +199,28 @@ class Board:
             else:
                 to_y -= 1
 
+            origin = from_x, from_y
+            dest = to_x, to_y
             # did knight drowned?
             if any((to_x < 0, to_y < 0, to_x >= self.rows, to_y >= self.columns)):
-                self.move_and_drown((from_x, from_y), knight_nk, item_nk)
+                self.move_and_drown(origin, knight_nk, item_nk)
             else:
-                origin = (from_x, from_y)
-                dest = (to_x, to_y)
                 try:
                     cell = list(self.arena[to_x][to_y])
                 except TypeError:
                     cell = None
-                # did knight move to an empty cell?
+                # did knight move into empty cell?
                 if not cell:
                     self.move_to_empty_cell(origin, dest, knight_nk, item_nk)
-                # did it to a cell with items only?
                 else:
                     any_item = any(content in self.items for content in cell)
-                    all_knights_death = all(self.knights[content].status != KNIGHT_LIVE
-                                            for content in cell
-                                            if content in self.knights)
-                    if any_item and all_knights_death:
+                    all_knights_dead = all(self.knights[content].status != KNIGHT_LIVE
+                                           for content in cell
+                                           if content in self.knights)
+                    # .. Did the knight move into a cell with items only - if any knight there => it should dead
+                    if any_item and all_knights_dead:
                         self.move_to_cell_with_items(origin, dest, knight_nk, item_nk)
+                    # ... Otherwise there is knight
                     else:
                         self.move_to_cell_with_knights(origin, dest, knight_nk)
 
