@@ -1,5 +1,6 @@
 import pytest
-from src.cell_content import Item, Knight, ItemFactory, KnightFactory
+from src.cell_content import Item
+from tests.utils import ItemFactory, KnightFactory
 
 
 @pytest.fixture(scope='module')
