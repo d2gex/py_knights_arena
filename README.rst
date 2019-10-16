@@ -21,6 +21,22 @@ are **daring vs clever** and **humble vs murderous**. This distinction is needed
 
 The idea is to simplify the such use cases using a YAGNI reasoning.
 
+Overall Strategy
+================
+Following the requirements specified above to avoid ambiguity, the use case scenarios for the strategy implementation
+have been segregated as follows:
+
+1.  A knight could move off the board and then drown
+2.  A knight could move into an empty cell where no action is required except updating the position of the knight and
+    the item.
+3.  A knight could move into an item-only cell. A cell is item-only iff there is an item and either there are no knights
+    or if the are, they all are dead. In which case it will pick an item following the requirements provided in the
+    exercise.
+4.  I none of the above, the knight has moved into a cell with a knight. In such case the attacking and defending knight
+    will fight iff they both are provided with an item. Otherwise they will proclaim truce.
+5.  For the cases in which there is a knight and an item, the attacking knight **will always ignore the items** if
+    the knight is alive.
+
 
 How to run
 ===========
