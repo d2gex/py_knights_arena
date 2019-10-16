@@ -1,12 +1,12 @@
 from src.cell_content import KNIGHT_DROWNED, KNIGHT_DEAD
 
 
-def test_move_knight_no_item_north_and_drown(board, table_settings):
+def test_move_knight_no_item_north_and_drown(board, settings):
     '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
     item
     '''
     x, y = 0, 0
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
 
     knight_nk = board.knights['G'].nickname
@@ -20,12 +20,12 @@ def test_move_knight_no_item_north_and_drown(board, table_settings):
     assert board[x][y] is None  # previous position remains empty if not no items
 
 
-def test_move_knight__no_item_west_and_drown(board, table_settings):
+def test_move_knight__no_item_west_and_drown(board, settings):
     '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
     item
     '''
     x, y = 0, 0
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
 
     knight_nk = board.knights['G'].nickname
@@ -39,12 +39,12 @@ def test_move_knight__no_item_west_and_drown(board, table_settings):
     assert board[x][y] is None
 
 
-def test_move_knight__no_item_south_and_drown(board, table_settings):
+def test_move_knight__no_item_south_and_drown(board, settings):
     '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
     item
     '''
     x, y = 7, 7
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
 
     knight_nk = board.knights['G'].nickname
@@ -58,12 +58,12 @@ def test_move_knight__no_item_south_and_drown(board, table_settings):
     assert board[x][y] is None
 
 
-def test_move_knight__no_item_east_and_drown(board, table_settings):
+def test_move_knight__no_item_east_and_drown(board, settings):
     '''Ensure that when a knight drowns its status and position are both updated. Test of knight without
     item
     '''
     x, y = 7, 7
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
 
     knight_nk = board.knights['G'].nickname
@@ -77,12 +77,12 @@ def test_move_knight__no_item_east_and_drown(board, table_settings):
     assert board[x][y] is None
 
 
-def test_move_knight_with_item_drown(board, table_settings):
+def test_move_knight_with_item_drown(board, settings):
     '''Ensure that when knight with an item drown its status and position is update as well as its item is
     left on the tile he/she was standing
     '''
     x, y = 7, 7
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -99,10 +99,10 @@ def test_move_knight_with_item_drown(board, table_settings):
     assert board[x][y] == {axe.nickname}
 
 
-def test_move_knight_no_item_to_empty_cell(board, table_settings):
+def test_move_knight_no_item_to_empty_cell(board, settings):
     '''When a knight with no item moves into an empty cell the destination cell should be updated
     '''
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
 
     knight_nk = board.knights['G'].nickname
@@ -116,10 +116,10 @@ def test_move_knight_no_item_to_empty_cell(board, table_settings):
     assert board.k_positions[knight_nk] == (x+1, y)  # the position of the knight needs to be updated
 
 
-def test_move_knight_with_item_to_empty_cell(board, table_settings):
+def test_move_knight_with_item_to_empty_cell(board, settings):
     '''When a knight moves into an empty cell it takes its item with him/her
     '''
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -137,10 +137,10 @@ def test_move_knight_with_item_to_empty_cell(board, table_settings):
     assert board.i_positions[axe.nickname] == (x+1, y)  # the position of the item needs to be updated
 
 
-def test_move_knight_no_item_to_single_item_cell(board, table_settings):
+def test_move_knight_no_item_to_single_item_cell(board, settings):
     '''When a knight with no item moves into a cell with a single item, this picks it up.
     '''
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -159,10 +159,10 @@ def test_move_knight_no_item_to_single_item_cell(board, table_settings):
     assert knight.item
 
 
-def test_move_knight_with_item_to_single_item_cell(board, table_settings):
+def test_move_knight_with_item_to_single_item_cell(board, settings):
     '''When a knight with item move to another cell with an item, it ignores it
     '''
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -182,10 +182,10 @@ def test_move_knight_with_item_to_single_item_cell(board, table_settings):
     assert knight.item == magic_staff  # Knight has ignored the new item even if the new one is more powerful
 
 
-def test_move_knight_with_item_multiple_item_cell(board, table_settings):
+def test_move_knight_with_item_multiple_item_cell(board, settings):
     '''When a knight with item move to another cell with multiple items it picks the best item
     '''
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -214,11 +214,11 @@ def test_move_knight_with_item_multiple_item_cell(board, table_settings):
     assert knight.item == axe  # knight has swapped magic_staff with axe
 
 
-def test_move_knight_no_item_into_knight_cell(board, table_settings):
+def test_move_knight_no_item_into_knight_cell(board, settings):
     '''When a knight get into a cell with another knight but the former has not item => white flag is raised
     '''
 
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -241,11 +241,11 @@ def test_move_knight_no_item_into_knight_cell(board, table_settings):
     assert board.i_positions[magic_staff.nickname] == (x + 1, y)
 
 
-def test_move_knight_with_item_into_knight_no_item_cell(board, table_settings):
+def test_move_knight_with_item_into_knight_no_item_cell(board, settings):
     '''When a knight get into a cell with another knight but the latter has not item => white flag is raised
     '''
 
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -268,11 +268,11 @@ def test_move_knight_with_item_into_knight_no_item_cell(board, table_settings):
     assert board.i_positions[magic_staff.nickname] == (x + 1, y)
 
 
-def test_move_knight_with_item_into_knight_with_item_cell(board, table_settings):
+def test_move_knight_with_item_into_knight_with_item_cell(board, settings):
     '''When a knight with item get into a cell with another knight with item => they fight
     '''
 
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -306,13 +306,13 @@ def test_move_knight_with_item_into_knight_with_item_cell(board, table_settings)
     assert board.i_positions[d_item_nk] == (x + 1, y)
 
 
-def test_move_knight_to_a_mixed_cell(board, table_settings):
+def test_move_knight_to_a_mixed_cell(board, settings):
     '''When a knight move into a cell where there are both items and knights, only knights are taken into
     account ignoring fully the items. In this case scneario the defender does not have an item so nothing
     occurs.
     '''
 
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
     board.set_items(items)
 
@@ -341,12 +341,12 @@ def test_move_knight_to_a_mixed_cell(board, table_settings):
     assert all(board.k_positions[nickname] == (x + 1, y) for nickname in board.k_positions if nickname in board.knights)
 
 
-def test_move_knight_when_dead_or_drowned(board, table_settings):
+def test_move_knight_when_dead_or_drowned(board, settings):
     '''A knight who is dead the move does not apply
     '''
 
     x, y = 0, 0
-    table, knights, items = table_settings
+    table, knights, items = settings
     board.set_knights(knights)
 
     knight = board.knights['G']
@@ -366,5 +366,3 @@ def test_move_knight_when_dead_or_drowned(board, table_settings):
     # If the move was applicable,  the knight would drown and its position would be DROWNED
     assert board.knights[knight.nickname].status == KNIGHT_DROWNED
     assert board.k_positions[knight.nickname] == (x, y)
-
-
